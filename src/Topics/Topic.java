@@ -3,7 +3,7 @@ package Topics;
 import java.time.LocalDate;
 
 public class Topic {
-    private static int idTemp;
+    private static int idTemp = 1;  //holds unique id -values UNTIL the program is finished
     private final int id;
     private String title;
     private String description;

@@ -1,3 +1,9 @@
+/*
+ *stil needs a method (or a new class of methods) to write and read from a file
+ *desperate need of cleaning, maybe streams or - as above - whole new class for method -collection
+ *maybe some methods use same syntax -more and shorter methods?
+ */
+
 package Topics;
 
 import java.io.*;
