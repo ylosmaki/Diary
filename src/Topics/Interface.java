@@ -63,11 +63,10 @@ public class Interface {
                     getTopic(diary);
                     break;
 
- /*               case "paivita":
-                    System.out.print("Minkä aiheen haluat päivittää: ");
-                    String tmp = reader.nextLine();
-                    updateTopic(tmp);
-                    break;*/
+                case "paivita":
+
+                    updateTopic();
+                    break;
 
                 case "poista":
                     deleteTopic(diary);
@@ -136,14 +135,39 @@ public class Interface {
         }
     }
 
- /*   public void updateTopic(String name) {
+    public void updateTopic() {
+        System.out.print("Minkä aiheen haluat päivittää: ");
+        String tmp = reader.nextLine();
+
         for(Topic topic : this.diary) {
-            if(name.equals(topic.getTitle())) {
+            if(tmp.equals(topic.getTitle())) {
+                System.out.println("Minkä tiedon haluat päivittää?");
+                System.out.print("(k = kuvaus, l = linkki, t = tehty/ei) ");
+                String field = reader.nextLine();
+
+                switch (field)  {
+                    case "k" :
+                        System.out.print("Anna uusi kuvaus: ");
+                        String descr = reader.nextLine();
+                        topic.setDescription(descr);
+                        break;
+                    case "l" :
+                        System.out.print("Anna uusi linkki: ");
+                        String link = reader.nextLine();
+                        topic.setAdditionalSource(link);
+                    case "t" :
+                        System.out.print("Anna uusi status: ");
+                        boolean status = Boolean.valueOf(reader.nextLine());
+                        topic.setComplete(status);
+                    default:
+                        System.out.println("Outo komento");
+                        break;
+                }
 
             }
         }
 
-    }*/
+    }
 
     public void deleteTopic(List<Topic> list) {
         System.out.print("Poistettava aihe: ");

@@ -34,6 +34,18 @@ public class Topic {
         return title;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAdditionalSource(String additionalSource) {
+        this.additionalSource = additionalSource;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
+    }
+
     public String getDescription() {
         return description;
     }
