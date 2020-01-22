@@ -2,6 +2,7 @@ package Topics;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,19 +53,24 @@ public class Interface {
             switch (command) {
                 case "lisaa":
                     diary.add(addTopic());
-//testimielessä                    System.out.println(diary);
                     break;
 
                 case "tulosta":
                     printTopics(diary);
                     break;
 
- /*               case "poista":
-                    deleteTopic();
-                    break;*/
-
                 case "hae":
                     getTopic(diary);
+                    break;
+
+ /*               case "paivita":
+                    System.out.print("Minkä aiheen haluat päivittää: ");
+                    String tmp = reader.nextLine();
+                    updateTopic(tmp);
+                    break;*/
+
+                case "poista":
+                    deleteTopic(diary);
                     break;
 
                 default:
@@ -96,8 +102,8 @@ public class Interface {
 
   */
 
-//       }
     }
+
 
     public Topic addTopic() {
         System.out.print("Kirjoita aihe:");
@@ -129,5 +135,28 @@ public class Interface {
             }
         }
     }
+
+ /*   public void updateTopic(String name) {
+        for(Topic topic : this.diary) {
+            if(name.equals(topic.getTitle())) {
+
+            }
+        }
+
+    }*/
+
+    public void deleteTopic(List<Topic> list) {
+        System.out.print("Poistettava aihe: ");
+        String name = this.reader.nextLine();
+
+        Iterator<Topic> iter = list.iterator();
+        for(; iter.hasNext() ;) {
+            Topic tmp = iter.next();
+            if(name.equals(tmp.getTitle())) {
+                iter.remove();
+            }
+        }
+    }
+
 
 }
