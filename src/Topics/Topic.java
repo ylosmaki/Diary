@@ -12,13 +12,21 @@ public class Topic {
     private LocalDate creationDate;
     private LocalDate completionDate;
 
+    public Topic(String title,String description) {
+        this.title = title;
+        this.description = description;
+        this.additionalSource = "-";
+        this.creationDate = LocalDate.now();
+        this.complete = false;
+        this.id = setId();
+    }
+
     public Topic(String title, String description, String additionalSource) {
         this.title = title;
         this.description = description;
         this.additionalSource = additionalSource;
         this.creationDate = LocalDate.now();
         this.complete = false;
-//toimiiko id, nollaa kun ohjelman sulkee?
         this.id = setId();
     }
 
@@ -31,7 +39,7 @@ public class Topic {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setDescription(String description) {

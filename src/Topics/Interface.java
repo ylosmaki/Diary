@@ -6,21 +6,12 @@
 
 package Topics;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
 
 public class Interface {
 
-    private Scanner reader;
-    private List<Topic> diary;
-
-    public Interface() {
-        this.reader = new Scanner(System.in);
-        this.diary = new ArrayList<>();
-    }
+    private Scanner reader = new Scanner(System.in);
+    private Diary diary = new Diary();
 
     public void start() {
 
@@ -28,22 +19,12 @@ public class Interface {
         System.out.println("****Ohjeistusta, ja alustuskrääsää****");
         System.out.println("KOMENNOT:");
         System.out.println("Lisaa uusi aihe: " + "\"lisaa\"");
-        System.out.println("Tulostaa aiheet: " + "\"tulosta\"");
+        System.out.println("Näytä kaikki aiheet: " + "\"aiheet\"");
         System.out.println("Poista aihe: " + "\"poista\"");
+        System.out.println("Päivitä aihetta: " + "\"paivita\"");
+        System.out.println("Tallenna tiedostoon: " + "\"tallenna\"");
         System.out.println("Hae yksittäinen aihe: " + "\"hae\"");
         System.out.println("Lopeta ohjelma: " + "\"lopeta\"");
-
-
-//tiedoston nimi, kannattaako lukea käyttäjältä ja pitäisi tarkistaa onko olemassa
-
-//        while(true) {
-//            System.out.print(">");
-//            String command = this.reader.nextLine();
-
-//            if (!"lopeta".equals(command)) {
-
-/*                System.out.println("Anna tiedostonimi:");
-                String filename = this.reader.nextLine();*/
 
 
         while(true) {
@@ -58,24 +39,60 @@ public class Interface {
 
             switch (command) {
                 case "lisaa":
-                    diary.add(addTopic());
+                    addTopic();
                     break;
 
-                case "tulosta":
-                    printTopics(diary);
+                case "aiheet":
+                    if(this.diary.howManyTopics()==0) {
+                        System.out.println("Päiväkirja on tyhjä.");
+                    } else {
+                        System.out.println("AIHEET:");
+                        diary.printTopics();
+                    }
                     break;
 
                 case "hae":
-                    getTopic(diary);
+                    System.out.print("Hae aihetta: ");
+                    String name = this.reader.nextLine();
+                    if(this.diary.containsTopic(name)) {
+                        Topic topic = diary.getTopic(name);
+                        System.out.println(topic);
+                    } else {
+                        System.out.println("Aihetta ei löydy.");
+                    }
                     break;
 
                 case "paivita":
-
                     updateTopic();
                     break;
 
                 case "poista":
-                    deleteTopic(diary);
+                    System.out.print("Poistettava aihe: ");
+                    diary.deleteTopic(this.reader.nextLine());
+                    break;
+
+                case "tallenna":
+                    System.out.print("Anna tiedoston nimi: ");
+                    String fileName = this.reader.nextLine();
+
+                    //fileName tarkistus, onko olemassa vaiko ei...
+
+//tämä metodiksi diary -luokkaan???
+/*                    try {
+                        FileWriter writer = new FileWriter(filename, true);
+                        writer.write(id);
+                        writer.write(title);
+                        writer.write(description);
+                        writer.write(link);
+                        writer.close();
+                    } catch (FileNotFoundException ex) {
+                        System.out.println("Virhe: tiedostoa ei löytynyt");
+                    } catch(IOException ex) {
+                        System.out.println("Virhe: muu virhe lukiessa");
+                    }
+
+                    System.out.println(todaystopic);*/
+                    System.out.println("Tallennettu tiedostoon: " + fileName);
                     break;
 
                 default:
@@ -84,33 +101,10 @@ public class Interface {
 
             }
         }
-
-
-
-//tulostetaanko tiedostoon?
-
- /*           try {
-                FileWriter writer = new FileWriter(filename, true);
-                writer.write(id);
-                writer.write(title);
-                writer.write(description);
-                writer.write(link);
-                writer.close();
-
-            } catch (FileNotFoundException ex) {
-                System.out.println("Virhe: tiedostoa ei löytynyt");
-            } catch(IOException ex) {
-                System.out.println("Virhe: muu virhe lukiessa");
-            }
-
-            System.out.println(todaystopic);
-
-  */
-
     }
 
 
-    public Topic addTopic() {
+    public void addTopic() {
         System.out.print("Kirjoita aihe:");
         String title = this.reader.nextLine();
 
@@ -120,71 +114,40 @@ public class Interface {
         System.out.print("Kirjoita linkki tm.:");
         String link = this.reader.nextLine();
 
-        Topic problem = new Topic(title, description, link);
-        return problem;
-    }
+        diary.addToDiary(title, description, link);
 
-    public void printTopics(List<Topic> list) {
-        System.out.println("AIHEET:");
-        for(Topic topic : list) {
-            System.out.println(topic.getTitle());
-        }
-    }
-
-    public void getTopic(List<Topic> list) {
-        System.out.print("Hae aihetta: ");
-        String name = this.reader.nextLine();
-        for(Topic topic : list) {
-            if(name.equals(topic.getTitle())) {
-                System.out.println(topic);
-            }
-        }
     }
 
     public void updateTopic() {
         System.out.print("Minkä aiheen haluat päivittää: ");
-        String tmp = reader.nextLine();
+        String update = this.reader.nextLine();
+        Topic topic = diary.getTopic(update);
 
-        for(Topic topic : this.diary) {
-            if(tmp.equals(topic.getTitle())) {
-                System.out.println("Minkä tiedon haluat päivittää?");
-                System.out.print("(k = kuvaus, l = linkki, t = tehty/ei) ");
-                String field = reader.nextLine();
+//tehty/ei ei vielä ehkä ymmärrä true/falsea
+        System.out.println("Minkä tiedon haluat päivittää?");
+        System.out.print("(k = kuvaus, l = linkki, t = tehty/ei) ");
+        String field = reader.nextLine();
 
-                switch (field)  {
-                    case "k" :
-                        System.out.print("Anna uusi kuvaus: ");
-                        String descr = reader.nextLine();
-                        topic.setDescription(descr);
-                        break;
-                    case "l" :
-                        System.out.print("Anna uusi linkki: ");
-                        String link = reader.nextLine();
-                        topic.setAdditionalSource(link);
-                    case "t" :
-                        System.out.print("Anna uusi status: ");
-                        boolean status = Boolean.valueOf(reader.nextLine());
-                        topic.setComplete(status);
-                    default:
-                        System.out.println("Outo komento");
-                        break;
-                }
+        switch (field)  {
+            case "k" :
+                System.out.print("Anna uusi kuvaus: ");
+                String descr = reader.nextLine();
+                topic.setDescription(descr);
+                break;
 
-            }
-        }
-
-    }
-
-    public void deleteTopic(List<Topic> list) {
-        System.out.print("Poistettava aihe: ");
-        String name = this.reader.nextLine();
-
-        Iterator<Topic> iter = list.iterator();
-        for(; iter.hasNext() ;) {
-            Topic tmp = iter.next();
-            if(name.equals(tmp.getTitle())) {
-                iter.remove();
-            }
+            case "l" :
+                System.out.print("Anna uusi linkki: ");
+                String link = reader.nextLine();
+                topic.setAdditionalSource(link);
+                break;
+            case "t" :
+                System.out.print("Anna uusi status: ");
+                boolean status = Boolean.valueOf(reader.nextLine());
+                topic.setComplete(status);
+                break;
+            default:
+                System.out.println("Outo komento");
+                break;
         }
     }
 
